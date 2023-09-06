@@ -11,7 +11,11 @@ class HSVisitorTableViewCell: UITableViewCell {
     @IBOutlet weak var todaysVisitorLabel: UILabel!
     @IBOutlet weak var viewAllButton: UIButton!
     @IBOutlet weak var visitorCollectioniew: UICollectionView!
+    @IBOutlet weak var noVisitorView: UIView!
+    @IBOutlet weak var noVisitorVisitingLabel: UILabel!
+    @IBOutlet weak var createPassButton: UIButton!
     
+//    private let visitors = [String]()
     private let visitors = [
         "Soumya Dutta",
         "Vansh",
@@ -25,22 +29,46 @@ class HSVisitorTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        visitorCollectioniew.delegate = self
-        visitorCollectioniew.dataSource = self
+        self.setUpUI()
         
-        self.visitorCollectioniew.register(UINib(nibName: "HSVisitorCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "HSVisitorCollectionViewCell")
+    }
+
+    private func setUpUI(){
+        if visitors.count == 0{
+            self.noVisitorUI()
+            self.visitorCollectioniew.isHidden = true
+            self.noVisitorView.isHidden = false
+        } else{
+            self.visitorCollectioniew.isHidden = false
+            self.noVisitorView.isHidden = true
+            visitorCollectioniew.delegate = self
+            visitorCollectioniew.dataSource = self
+            
+            self.visitorCollectioniew.register(UINib(nibName: "HSVisitorCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "HSVisitorCollectionViewCell")
+        }
     }
     
     @IBAction func viewAllAction(_ sender: Any) {
         print("View All clicked")
     }
+    
+    func noVisitorUI(){
+        self.noVisitorView.backgroundColor = UIColor(red: 0.969, green: 0.945, blue: 0.965, alpha: 1)
+        self.noVisitorView.layer.cornerRadius = 12
+        self.createPassButton.setTitleColor(UIColor(red: 0.518, green: 0.047, blue: 0.435, alpha: 1), for: .normal)
+    }
+    
+    @IBAction func createPassAction(_ sender: Any) {
+        print("Pass Create")
+    }
+    
 }
 extension HSVisitorTableViewCell: UICollectionViewDelegate{
     
 }
 extension HSVisitorTableViewCell: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return visitors.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
